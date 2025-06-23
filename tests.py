@@ -1,3 +1,4 @@
+import pytest
 from main import BooksCollector
 
 # класс TestBooksCollector объединяет набор тестов, которыми мы покрываем наше приложение BooksCollector
@@ -109,3 +110,18 @@ class TestBooksCollector:
         collector.add_book_in_favorites('Дюна')
         collector.add_book_in_favorites('Оно')
         assert collector.get_list_of_favorites_books() == ['Дюна', 'Оно']
+
+        # Параметризованный тест: проверяем добавление книг с корректными названиями
+
+    @pytest.mark.parametrize("book_name", [
+        "1984",
+        "Краткая история времени",
+        "Малыш и Карлсон",
+        "Harry Potter",
+        "Book with symbols !@#",
+        "Название длиной 40 символов " + "А" * (40 - len("Название длиной 40 символов "))
+    ])
+    def test_add_new_book_with_valid_names(self, book_name):
+        collector = BooksCollector()
+        collector.add_new_book(book_name)
+        assert book_name in collector.get_books_genre()
